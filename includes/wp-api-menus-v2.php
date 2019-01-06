@@ -310,13 +310,17 @@ if ( ! class_exists( 'WP_REST_Menus' ) ) :
 					'target'      => $item->target,
 					'classes'     => implode( ' ', $item->classes ),
 					'xfn'         => $item->xfn,
-					'description' => $item->description,
 					'object_id'   => abs( $item->object_id ),
 					'object'      => $item->object,
 					'type'        => $item->type,
 					'type_label'  => $item->type_label,
 					'children'    => array(),
-				);
+                );
+                
+                if ( $item['object'] == 'category' ) {
+                    $formatted['description'] = get_category( $item['object_id'] )->description;
+                }
+
 				// Pickup my children
 				if ( array_key_exists ( $item->ID , $cache ) ) {
 					$formatted['children'] = array_reverse ( $cache[ $item->ID ] );
@@ -395,13 +399,16 @@ if ( ! class_exists( 'WP_REST_Menus' ) ) :
                 'target'      => $item['target'],
                 'classes'     => implode( ' ', $item['classes'] ),
                 'xfn'         => $item['xfn'],
-                'description' => $item['description'],
                 'object_id'   => abs( $item['object_id'] ),
                 'object'      => $item['object'],
                 'object_slug' => get_post($item['object_id'])->post_name,
                 'type'        => $item['type'],
                 'type_label'  => $item['type_label'],
             );
+
+            if ( $item['object'] == 'category' ) {
+                $menu_item['description'] = get_category( $item['object_id'] )->description;
+            }
 
             if ( $children === true && ! empty( $menu ) ) {
 	            $menu_item['children'] = $this->get_nav_menu_item_children( $item['ID'], $menu );
