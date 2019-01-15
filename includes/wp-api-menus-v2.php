@@ -391,13 +391,18 @@ if ( ! class_exists( 'WP_REST_Menus' ) ) :
                 'title'       => $item['title'],
                 'object_id'   => abs( $item['object_id'] ),
                 'object'      => $item['object'],
-                'object_slug' => get_post($item['object_id'])->post_name,
                 'type'        => $item['type'],
                 'type_label'  => $item['type_label'],
             );
 
             if ( $item['object'] == 'category' ) {
-                $menu_item['description'] = get_category( $item['object_id'] )->description;
+                $category = get_category( $item['object_id'] );
+                $menu_item['description'] = $category->description;
+                $menu_item['object_slug'] = $category->slug;
+            }
+
+            if ( $item['object'] == 'post' ) {
+                $menu_item['object_slug'] = get_post($item['object_id'])->post_name;
             }
 
             if ( $children === true && ! empty( $menu ) ) {
