@@ -399,6 +399,10 @@ if ( ! class_exists( 'WP_REST_Menus' ) ) :
                 $category = get_category( $item['object_id'] );
                 $menu_item['description'] = $category->description;
                 $menu_item['object_slug'] = $category->slug;
+
+                if (function_exists('z_taxonomy_image_url')) {
+                    $menu_item['image_url'] = z_taxonomy_image_url( $item['object_id'] );
+                }
             }
 
             if ( $item['object'] == 'post' ) {
